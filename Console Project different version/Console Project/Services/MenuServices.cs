@@ -11,7 +11,7 @@ namespace Console_Project.Operations
         public static AcademyService academyService = new AcademyService();
 
         public static void MenuCreateGroup()
-        {
+        {            
             Console.WriteLine("Is this group online?(Press 1 or 2)\n1.Yes\n2.No");
             bool isonline;
             string str = Console.ReadLine();
@@ -96,7 +96,7 @@ namespace Console_Project.Operations
             }
             Console.WriteLine("Which group's students do you want to see?");
             string no = Console.ReadLine();
-            academyService.ShowStudentsInGroup(no);
+            academyService.ShowStudentsInGroup(no); ;
         }
         public static void MenuShowAllStudents()
         {            
@@ -132,42 +132,14 @@ namespace Console_Project.Operations
                 }
                 if (!containsGroupNo)
                 {
-                    Console.WriteLine($"{groupNo.ToUpper().Trim()} Doesn't exist\n\nAvailable groups:");//qrup dolubsa onlari gostermemekde olar 
+                    Console.WriteLine($"{groupNo.ToUpper().Trim()} Doesn't exist\n\nAvailable groups:");//We could write a code that wouldn't show full groups
                     foreach (Group group in academyService.AllGroups)
                     {
                         Console.WriteLine(group.No);
                     } 
                 }
             } while (!containsGroupNo);
-            // belke hamisini while loopuna saldim
-             
-
-            //Console.WriteLine("Choose:(Press 1 or 2)\n1.Online\n2.Offline ");
-            //bool isonline;           
-            //string strOnline = Console.ReadLine();
-            //bool resultOnline = byte.TryParse(strOnline, out byte numOnline);
-            //if (resultOnline)
-            //{
-            //    switch (numOnline)
-            //    {
-            //        case 1:
-            //            isonline = true;
-            //            break;
-            //        case 2:
-            //            isonline = false;
-            //            break;
-            //        default:
-            //            AcademyService.ClearAndColor();
-            //            Console.WriteLine("Input valid num value");
-            //            return;
-            //    }
-            //}
-            //else
-            //{
-            //    AcademyService.ClearAndColor();
-            //    Console.WriteLine("Input valid num value");
-            //    return;
-            //}
+            
             Console.WriteLine("Choose Type:(Press 1 or 2)\n1.Warranted\n2.Not Warranted");
             bool type;
             string strType = Console.ReadLine();

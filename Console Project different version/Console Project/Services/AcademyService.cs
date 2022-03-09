@@ -10,7 +10,6 @@ namespace Console_Project.Operations
     class AcademyService : IAcademyServices
     {
         public List<Group> AllGroups { get; } = new List<Group>();
-
         public List<Student> AllStudents { get; } = new List<Student>();
 
         public void CreateGroup(Categories category, bool isonline)
@@ -55,22 +54,23 @@ namespace Console_Project.Operations
             }
         }
         public void EditGroupNo(string no, string newNo)
-        {
-            Group existGroup = FindGroup(no);
-            if (!CheckGroupNo(newNo))
-            {
-                return;
-            }                        
-            if (string.IsNullOrEmpty(newNo))
+        {            
+            if (string.IsNullOrEmpty(no) || string.IsNullOrEmpty(newNo))
             {
                 ClearAndColor();
-                Console.WriteLine("Can't input any white space");
+                Console.WriteLine("Please enter something. You can't have empty value.");
                 return;
             }
-            if (string.IsNullOrWhiteSpace(newNo))
+            if (string.IsNullOrWhiteSpace(no) || string.IsNullOrWhiteSpace(newNo))
             {
                 ClearAndColor();
-                Console.WriteLine("Can't input any white space");
+                Console.WriteLine("Please enter something. You can't have just white spaces.");
+                return;
+            }           
+            Group existGroup = FindGroup(no);
+            string groupNo = newNo.Trim();
+            if (!CheckGroupNo(groupNo))
+            {
                 return;
             }
             if (existGroup == null)
@@ -81,73 +81,99 @@ namespace Console_Project.Operations
             }
             foreach (Group group in AllGroups)
             {
-                if (group.No.ToLower().Trim() == newNo.ToLower().Trim())
+                if (group.No.ToLower().Trim() == groupNo.ToLower().Trim())
                 {
                     ClearAndColor();
                     Console.WriteLine($"{group.No.ToUpper().Trim()} already exists");
                     return;
                 }
-            }
-            //switch (categories)
-            //{
+            }            
+            //For example: If you create S100 group, you can't change it to P200. They must be from the same category.(my own rule)
             switch (existGroup.Category)
             {
                 case Categories.Programming:
-                    if (newNo[0] == 'p' || newNo[0] == 'P')
+
+                    if (groupNo.StartsWith('p') || groupNo.StartsWith('P'))
                     {
                         break;
                     }
                     else
                     {
-                        Console.WriteLine("The groupNo you're trying to enter is not from the same category");
+                        ClearAndColor();
+                        Console.WriteLine($"{groupNo} is not from the same category as {no}. You can only edit groups that are in the same category.");
                         return;
                     }                    
                 case Categories.Design:
-                    if (newNo[0] == 'd' || newNo[0] == 'D')
+                    if (groupNo.StartsWith('d') || groupNo.StartsWith('D'))
                     {
                         break;
                     }
                     else
                     {
-                        Console.WriteLine("The groupNo you're trying to enter is not from the same category");
+                        ClearAndColor();
+                        Console.WriteLine($"{groupNo} is not from the same category as {no}. You can only edit groups that are in the same category.");
                         return;
                     }                    
                 case Categories.SystemAdministration:
-                    if (newNo[0] == 's' || newNo[0] == 'S')
+                    if (groupNo.StartsWith('s') || groupNo.StartsWith('S'))
                     {
                         break;
                     }
                     else
                     {
-                        Console.WriteLine("The groupNo you're trying to enter is not from the same category");
+                        ClearAndColor();
+                        Console.WriteLine($"{groupNo} is not from the same category as {no}. You can only edit groups that are in the same category.");
                         return;
-                    }                    
+                    }
                 default:
-                    Console.WriteLine("Group name doesn't start with the categories");
-                    return;                    
+                    ClearAndColor();
+                    Console.WriteLine($"{groupNo} doesn't start with the category its in.");//Not possible to get to this error so we can delete default case but i kept it just in case.
+                    return;
             }
-            existGroup.No = newNo;            
+            existGroup.No = groupNo;            
 
             //When calling ShowAllStudents() after EditGroupNo() it shows the old groupNo. This code is preventing that.                                                   
             foreach (Student student in existGroup.Students)
             {
-                student.GroupNo = newNo;
+                student.GroupNo = groupNo;
             }
-            Console.WriteLine($"{no.ToUpper().Trim()} Hall has been successfuly changed to {newNo.ToUpper().Trim()}\n");
-        }       
-        public static bool CheckGroupNo(string groupno)
-        {
-            string group = groupno.Trim();
-            if (group.Length <= 4 && char.IsUpper(group[0]) && char.IsDigit(group[1]) && char.IsDigit(group[2]) && char.IsDigit(group[3]))
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"{no.ToUpper().Trim()} has been successfuly changed to {groupNo.ToUpper().Trim()}\n");
+        }
+        public static bool CheckGroupNo(string groupNo)
+        {            
+            if (groupNo.Length == 4 && char.IsLetter(groupNo[0]))
             {
+                for (int i = 1; i < groupNo.Length; i++)
+                {
+                    if (!char.IsDigit(groupNo[i]))
+                    {
+                        ClearAndColor();
+                        Console.WriteLine("Last 3 characters must be all digits");
+                        return false;
+                    }
+                }
                 return true;
             }
-            else
-            {
-                Console.WriteLine("GroupNo needs to be 4 character long. First character must be a letter and last 3 characters should be all digits");
-                return false;
-            }
+            ClearAndColor();
+            Console.WriteLine("GroupNo needs to be 4 characters long.\nFirst character must be a letter and last 3 characters should be all digits");
+            return false;
         }
+        //public static bool CheckGroupNo(string groupno)
+        //{
+        //    string group = groupno.Trim();
+        //    if ((group.Length >= 4 && group.Length <= 6) && char.IsLetter(group[0]) && char.IsDigit(group[1]) && char.IsDigit(group[2]) && char.IsDigit(group[3]))
+        //    {
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        ClearAndColor();
+        //        Console.WriteLine("GroupNo needs to be 4 character long. First character must be a letter and last 3 characters should be all digits");
+        //        return false;
+        //    }
+        //}
         public Group FindGroup(string no)
         {            
             foreach (Group group in AllGroups)
@@ -158,18 +184,7 @@ namespace Console_Project.Operations
                 }
             }
             return null;
-        }
-        public Group FindGroup(Group currentGroup)
-        {
-            foreach (Group group in AllGroups)
-            {
-                if (group.No.ToLower().Trim() == currentGroup.No.ToLower().Trim())
-                {
-                    return group;
-                }
-            }
-            return null;
-        }
+        }       
         public void ShowStudentsInGroup(string no)
         {            
             Group group = FindGroup(no);
@@ -201,8 +216,7 @@ namespace Console_Project.Operations
                 ClearAndColor();
                 Console.WriteLine("There's no students.");
                 return;
-            }
-            
+            }            
             foreach (Group group in AllGroups)
             {
                 string statusOnline = group.IsOnline ? "Online" : "Offline";
@@ -239,14 +253,13 @@ namespace Console_Project.Operations
             foreach (Student stud in group.Students)
             {
                 Console.WriteLine($"{stud}, Status: {statusOnline}");
-            }
-            
+            }            
         }
         public static bool CheckFullname(string fullname)
         {
             if (fullname.Length > 30)
             {
-                AcademyService.ClearAndColor();
+                ClearAndColor();
                 Console.WriteLine($"{fullname.ToUpper().Trim()} is too long. Enter less than 30 characters.");
                 return false;
             }
@@ -266,11 +279,11 @@ namespace Console_Project.Operations
                 {
                     return true;
                 }
-                AcademyService.ClearAndColor();
+                ClearAndColor();
                 Console.WriteLine("Both Name and Surname needs to be at least 3 characters.");
                 return false;
             }
-            AcademyService.ClearAndColor();
+            ClearAndColor();
             Console.WriteLine("Fullname must include: Name + Space + Surname. Example(Fakhri Afandiyev)");
             return false;
         }
