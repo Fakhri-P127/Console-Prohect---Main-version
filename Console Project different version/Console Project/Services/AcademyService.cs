@@ -16,6 +16,7 @@ namespace Console_Project.Operations
         public void CreateGroup(Categories category, bool isonline)
         {                                              
             Group group = new Group(category, isonline);
+            //this checks if the group you're creating already exists or not. For example: if you create P100 then edit it to P101, you won't be able to create P101(you will be the next time you try to create a group).
             if (!CheckGroupNo(group))
             {
                 ClearAndColor();
@@ -83,6 +84,7 @@ namespace Console_Project.Operations
                 Console.WriteLine("Please enter a groupNo that exists");
                 return;
             }
+            // this makes sure that you can't change the groupNo to an existing one
             foreach (Group group in AllGroups)
             {
                 if (group.No.ToLower().Trim() == groupNo.ToLower().Trim())
@@ -213,12 +215,12 @@ namespace Console_Project.Operations
             }            
             foreach (Group group in AllGroups)
             {
-                string statusOnline = group.IsOnline ? "Online" : "Offline";
+                string statusOnline = group.IsOnline ? "Online" : "Offline";                
                 foreach (Student student in group.Students)
                 {
                     Console.WriteLine($"{student}, Status: {statusOnline}");
                 }                
-            }                       
+            }            
         }   
         
         public void CreateStudent(string fullname,string groupNo, bool type)
@@ -241,8 +243,8 @@ namespace Console_Project.Operations
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"Created Student {fullname.ToUpper().Trim()}\n");            
-            AllStudents.Add(student);
-            group.Students.Add(student);
+            AllStudents.Add(student);//adding student to the Allstudent list
+            group.Students.Add(student);//adding student to the group
             Console.WriteLine($"Students in group {groupNo.ToUpper().Trim()}:\n");
             string statusOnline = group.IsOnline ? "Online" : "Offline";
             foreach (Student eachStudent in group.Students)
@@ -261,14 +263,19 @@ namespace Console_Project.Operations
             ClearAndColor();        
             Console.WriteLine($"{student.Fullname} has been deleted.");
         }
-        //public void DeleteGroup(Group group)
-        //{           
-        //    AllGroups.Remove(group);
-        //    //AllGroups.Remove(group.Students);
-        //    ClearAndColor();
-        //    Console.WriteLine($"{group.No} has been deleted.");
-        //}
-
+        public void DeleteGroup(Group group)
+        {
+            // We can't modify the list while we are looping through the same list.(We can with Linq) so I wrote it with while loop                        
+            while (group.Students.Count != 0)
+            {
+                AllStudents.Remove(group.Students.Find(x => x.GroupNo.ToLower() == group.No.ToLower()));
+                group.Students.Remove(group.Students.Find(x => x.GroupNo.ToLower() == group.No.ToLower()));
+            }
+            AllGroups.Remove(group);                      
+            ClearAndColor();
+            Console.WriteLine($"{group.No} has been deleted.");
+        }
+        
         public static bool CheckFullname(string fullname)
         {
             if (fullname.Length > 30)

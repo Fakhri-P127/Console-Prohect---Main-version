@@ -13,11 +13,11 @@ namespace Console_Project.Operations
         public static void MenuCreateGroup()
         {
             bool isonline=false;
-            int num;
+            int num;            
             do
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("Is this group online?(Press 1 or 2)\n1.Yes\n2.No\n\n\n\n0.Return to the Menu\n");
+                Console.WriteLine("Is this group online?(Press 1 or 2)\n1.Yes\n2.No\n\n0.Return to the Menu\n");
                 string strNum = Console.ReadLine();
                 bool resultOnline = int.TryParse(strNum, out num);
                 if (resultOnline)
@@ -25,14 +25,12 @@ namespace Console_Project.Operations
                     switch (num)
                     {
                         case 1:
-                            isonline = true;
-                            Console.Clear();
+                            isonline = true;                            
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.WriteLine("The Group will be Online\n");
                             break;
                         case 2:
-                            isonline = false;
-                            Console.Clear();
+                            isonline = false;                            
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.WriteLine("The Group will be Offline\n");
                             break;
@@ -62,7 +60,7 @@ namespace Console_Project.Operations
                 {
                     Console.WriteLine($"{(int)item}.{item}");
                 }
-                Console.WriteLine("\n\n\n\n0.Return to the Menu\n");
+                Console.WriteLine("\n0.Return to the Menu\n");
                 string strCategory = Console.ReadLine();
                 bool result = int.TryParse(strCategory, out category);
                 if (result)
@@ -93,8 +91,7 @@ namespace Console_Project.Operations
                     AcademyService.ClearAndColor();
                     Console.WriteLine("Input num value(Press 1, 2 or 3)");
                 }                                
-            } while (category != 1 && category != 2 && category != 3);
-            
+            } while (category != 1 && category != 2 && category != 3);            
         }
 
         public static void MenuShowAllGroups()
@@ -180,7 +177,7 @@ namespace Console_Project.Operations
             do
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("Choose Type:(Press 1 or 2)\n1.Warranted\n2.Not Warranted\n\n\n\n0.Return to the Menu\n");
+                Console.WriteLine("Choose Type:(Press 1 or 2)\n1.Warranted\n2.Not Warranted\n\n0.Return to the Menu\n");
                 string strType = Console.ReadLine();
                 bool resultType = int.TryParse(strType, out numType);
                 if (resultType)
@@ -235,25 +232,25 @@ namespace Console_Project.Operations
             academyService.DeleteStudent(student);            
         }
 
-        //public static void MenuDeleteGroup()
-        //{
-        //    if (academyService.AllGroups.Count == 0)
-        //    {
-        //        AcademyService.ClearAndColor();
-        //        Console.WriteLine("No groups to remove");
-        //        return;
-        //    }
-        //    Console.ForegroundColor = ConsoleColor.Cyan;
-        //    Console.WriteLine("Enter the groupNo you want to delete:");
-        //    string groupNo = Console.ReadLine().ToUpper().Trim();
-        //    Group group = academyService.AllGroups.Find(x => x.No == groupNo);
-        //    if (group == null)
-        //    {
-        //        AcademyService.ClearAndColor();
-        //        Console.WriteLine($"{groupNo} doesn't exist.");
-        //        return;
-        //    }
-        //    academyService.DeleteGroup(group);
-        //}
+        public static void MenuDeleteGroup()
+        {
+            if (academyService.AllGroups.Count == 0)
+            {
+                AcademyService.ClearAndColor();
+                Console.WriteLine("No groups to remove");
+                return;
+            }
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("Enter the groupNo you want to delete:");
+            string groupNo = Console.ReadLine().ToUpper().Trim();
+            Group group = academyService.AllGroups.Find(x => x.No == groupNo);
+            if (group == null)
+            {
+                AcademyService.ClearAndColor();
+                Console.WriteLine($"{groupNo} doesn't exist.");
+                return;
+            }
+            academyService.DeleteGroup(group);
+        }
     }
 }

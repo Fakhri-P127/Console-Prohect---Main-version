@@ -19,7 +19,7 @@ namespace Console_Project
                 Console.WriteLine("5. Show all Students");
                 Console.WriteLine("6. Create Student");
                 Console.WriteLine("7. Delete Student");
-                //Console.WriteLine("8. Delete Group");
+                Console.WriteLine("8. Delete Group");
                 Console.WriteLine("0. Exit");
                 string strNum = Console.ReadLine();
                 bool result = int.TryParse(strNum, out int num);                
@@ -52,9 +52,9 @@ namespace Console_Project
                         case 7:
                             MenuServices.MenuDeleteStudent();
                             break;
-                        //case 8:
-                        //    MenuServices.MenuDeleteGroup();
-                        //    break;
+                        case 8:
+                            MenuServices.MenuDeleteGroup();
+                            break;
                         case 0:
                             AcademyService.ClearAndColor();
                             Console.WriteLine("You exited the application");//there's no code after this so we can just return it, program will stop.
