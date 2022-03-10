@@ -19,7 +19,7 @@ namespace Console_Project.Models
         {            
             string statusType = Type ? "Warranted" : "Not Warranted";
             
-            return $"Fullname: {Fullname.ToUpper().Trim()}, GroupNo: {GroupNo.ToUpper().Trim()}, Type: {statusType}";
+            return $"Fullname: {Fullname}, GroupNo: {GroupNo}, Type: {statusType}";
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Console_Project.Enums;
 using Console_Project.Interfaces;
@@ -27,7 +26,7 @@ namespace Console_Project.Operations
             AllGroups.Add(group);            
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"Created GroupNo: {group.No.ToUpper().Trim()}\n");                       
+            Console.WriteLine($"Created GroupNo: {group.No}\n");                       
         }
 
         public bool CheckGroupNo(Group currentGroup)
@@ -73,6 +72,7 @@ namespace Console_Project.Operations
                 return;
             }           
             Group existGroup = FindGroup(no);
+            //trimming newNo so it can work even when we enter the value with white spaces in the beginning or in the end.
             string groupNo = newNo.Trim();
             if (!CheckGroupNo(groupNo))
             {
@@ -90,7 +90,7 @@ namespace Console_Project.Operations
                 if (group.No.ToLower().Trim() == groupNo.ToLower().Trim())
                 {
                     ClearAndColor();
-                    Console.WriteLine($"{group.No.ToUpper().Trim()} already exists");
+                    Console.WriteLine($"{group.No} already exists");
                     return;
                 }
             }            
@@ -145,7 +145,7 @@ namespace Console_Project.Operations
             }
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"{no.ToUpper().Trim()} has been successfuly changed to {groupNo.ToUpper().Trim()}\n");
+            Console.WriteLine($"{no} has been successfuly changed to {groupNo}\n");
         }
 
         public static bool CheckGroupNo(string groupNo)
@@ -242,9 +242,10 @@ namespace Console_Project.Operations
             Student student = new Student(fullname, groupNo, type);            
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"Created Student {fullname.ToUpper().Trim()}\n");            
+            Console.WriteLine($"Created Student {fullname}\n");            
             AllStudents.Add(student);//adding student to the Allstudent list
             group.Students.Add(student);//adding student to the group
+            //showing students in the group after creating new student
             Console.WriteLine($"Students in group {groupNo.ToUpper().Trim()}:\n");
             string statusOnline = group.IsOnline ? "Online" : "Offline";
             foreach (Student eachStudent in group.Students)
@@ -254,7 +255,8 @@ namespace Console_Project.Operations
         }
 
         public void DeleteStudent(Student student)
-        {            
+        {
+            //Simple delete student method
             AllStudents.Remove(student);
             foreach (Group group in AllGroups)
             {               
@@ -277,11 +279,11 @@ namespace Console_Project.Operations
         }
         
         public static bool CheckFullname(string fullname)
-        {
+        {            
             if (fullname.Length > 30)
             {
                 ClearAndColor();
-                Console.WriteLine($"{fullname.ToUpper().Trim()} is too long. Enter less than 30 characters.");
+                Console.WriteLine($"{fullname} is too long. Enter less than 30 characters.");
                 return false;
             }
             foreach (char letter in fullname)

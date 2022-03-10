@@ -153,7 +153,7 @@ namespace Console_Project.Operations
             do
             {
                 Console.WriteLine("Enter the groupno");
-                groupNo = Console.ReadLine();
+                groupNo = Console.ReadLine().ToUpper().Trim();
                 
                 foreach (Group group in academyService.AllGroups)
                 {
@@ -164,7 +164,7 @@ namespace Console_Project.Operations
                 }
                 if (!containsGroupNo)
                 {
-                    Console.WriteLine($"{groupNo.ToUpper().Trim()} Doesn't exist\n\nAvailable groups:");//We could write a code that wouldn't show full groups
+                    Console.WriteLine($"{groupNo} Doesn't exist\n\nAvailable groups:");//We could write a code that wouldn't show full groups
                     foreach (Group group in academyService.AllGroups)
                     {
                         Console.WriteLine(group.No);
@@ -208,7 +208,6 @@ namespace Console_Project.Operations
             } while (numType != 1 && numType != 2);
 
             academyService.CreateStudent(fullname, groupNo, type);
-
         }
 
         public static void MenuDeleteStudent()

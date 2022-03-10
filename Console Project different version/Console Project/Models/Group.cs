@@ -45,7 +45,7 @@ namespace Console_Project.Models
         public override string ToString()
         {
             string status = IsOnline ? "Online" : "Offline";
-            return $"GroupNo: {No.ToUpper().Trim()}, Category: {Category}, StudentCount: {Students.Count}, Status: {status}";
+            return $"GroupNo: {No}, Category: {Category}, StudentCount: {Students.Count}, Status: {status}";
         }
     }
 }
