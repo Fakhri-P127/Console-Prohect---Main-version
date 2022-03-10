@@ -14,5 +14,7 @@ namespace Console_Project.Interfaces
         public void ShowStudentsInGroup(string no);
         public void ShowAllStudents();
         public void CreateStudent(string fullname, string no, bool type);
+        public void DeleteStudent(Student student);
+        //public void DeleteGroup(Group group);
     }
 }

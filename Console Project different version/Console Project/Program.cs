@@ -8,7 +8,6 @@ namespace Console_Project
     {
         static void Main(string[] args)
         {
-            string strNum;
             do
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
@@ -19,45 +18,59 @@ namespace Console_Project
                 Console.WriteLine("4. Show Students in Group");
                 Console.WriteLine("5. Show all Students");
                 Console.WriteLine("6. Create Student");
-                Console.WriteLine("0.Exit");
-                strNum = Console.ReadLine();
-                //string isletdim cunki enter e falan basanda proqramdan atmasin. int verende tryagain ile etmek olar amma hele kecmemisik.
-                switch (strNum)
+                Console.WriteLine("7. Delete Student");
+                //Console.WriteLine("8. Delete Group");
+                Console.WriteLine("0. Exit");
+                string strNum = Console.ReadLine();
+                bool result = int.TryParse(strNum, out int num);                
+                if (result)
                 {
-                    case "1":
-                        MenuServices.MenuCreateGroup();
-                        break;
-                    case "2":
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        MenuServices.MenuShowAllGroups();
-                        break;
-                    case "3":
-                        Console.ForegroundColor = ConsoleColor.White;
-                        MenuServices.MenuEditGroupNo();
-                        break;
-                    case "4":
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        MenuServices.MenuShowStudentsInGroup();
-                        break;
-                    case "5":
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        MenuServices.MenuShowAllStudents();
-                        break;
-                    case "6":
-                        MenuServices.MenuCreateStudent();
-                        break;
-                    case "0":
-                        Console.Clear();
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("You exited the application");
-                        break;
-                    default:
-                        Console.Clear();
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Enter a valid number: ");
-                        break;
-                }            
-            } while (strNum != "0");
+                    switch (num)
+                    {
+                        case 1:
+                            MenuServices.MenuCreateGroup();
+                            break;
+                        case 2:
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            MenuServices.MenuShowAllGroups();
+                            break;
+                        case 3:
+                            Console.ForegroundColor = ConsoleColor.White;
+                            MenuServices.MenuEditGroupNo();
+                            break;
+                        case 4:
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            MenuServices.MenuShowStudentsInGroup();
+                            break;
+                        case 5:
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            MenuServices.MenuShowAllStudents();
+                            break;
+                        case 6:
+                            MenuServices.MenuCreateStudent();
+                            break;
+                        case 7:
+                            MenuServices.MenuDeleteStudent();
+                            break;
+                        //case 8:
+                        //    MenuServices.MenuDeleteGroup();
+                        //    break;
+                        case 0:
+                            AcademyService.ClearAndColor();
+                            Console.WriteLine("You exited the application");//there's no code after this so we can just return it, program will stop.
+                            return;
+                        default:
+                            AcademyService.ClearAndColor();
+                            Console.WriteLine("Please choose valid option:");
+                            break;
+                    }
+                }
+                else
+                {
+                    AcademyService.ClearAndColor();
+                    Console.WriteLine("Enter a valid number:");
+                }
+            } while (true);                     
         }
     }
 }

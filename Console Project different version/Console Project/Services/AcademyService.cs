@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Console_Project.Enums;
 using Console_Project.Interfaces;
@@ -22,11 +23,12 @@ namespace Console_Project.Operations
                 return;
             }            
             group.Limit = isonline ? group.Limit = 15 : group.Limit = 10;
-            AllGroups.Add(group);
+            AllGroups.Add(group);            
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"Created GroupNo: {group.No.ToUpper().Trim()}\n");                       
         }
+
         public bool CheckGroupNo(Group currentGroup)
         {
             //if the groupNo of the group changed, this makes sure that you can't create group with the same groupNo
@@ -39,7 +41,8 @@ namespace Console_Project.Operations
                 }                
             }
             return true;
-        }        
+        }      
+        
         public void ShowAllGroups()
         {
             if (AllGroups.Count == 0)
@@ -53,6 +56,7 @@ namespace Console_Project.Operations
                 Console.WriteLine(group);                
             }
         }
+
         public void EditGroupNo(string no, string newNo)
         {            
             if (string.IsNullOrEmpty(no) || string.IsNullOrEmpty(newNo))
@@ -141,6 +145,7 @@ namespace Console_Project.Operations
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"{no.ToUpper().Trim()} has been successfuly changed to {groupNo.ToUpper().Trim()}\n");
         }
+
         public static bool CheckGroupNo(string groupNo)
         {            
             if (groupNo.Length == 4 && char.IsLetter(groupNo[0]))
@@ -159,21 +164,8 @@ namespace Console_Project.Operations
             ClearAndColor();
             Console.WriteLine("GroupNo needs to be 4 characters long.\nFirst character must be a letter and last 3 characters should be all digits");
             return false;
-        }
-        //public static bool CheckGroupNo(string groupno)
-        //{
-        //    string group = groupno.Trim();
-        //    if ((group.Length >= 4 && group.Length <= 6) && char.IsLetter(group[0]) && char.IsDigit(group[1]) && char.IsDigit(group[2]) && char.IsDigit(group[3]))
-        //    {
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        ClearAndColor();
-        //        Console.WriteLine("GroupNo needs to be 4 character long. First character must be a letter and last 3 characters should be all digits");
-        //        return false;
-        //    }
-        //}
+        }   
+
         public Group FindGroup(string no)
         {            
             foreach (Group group in AllGroups)
@@ -185,6 +177,7 @@ namespace Console_Project.Operations
             }
             return null;
         }       
+
         public void ShowStudentsInGroup(string no)
         {            
             Group group = FindGroup(no);
@@ -199,8 +192,8 @@ namespace Console_Project.Operations
                 ClearAndColor();
                 Console.WriteLine("There's no students in this group.");
                 return;
-            }
-            string statusOnline = group.IsOnline ? "Online" : "Offline";
+            }           
+            string statusOnline = group.IsOnline ? "Online" : "Offline"; // Show online status as "Online" or "Offline"
             if (no.ToLower().Trim() == group.No.ToLower().Trim())
             {
                 foreach (Student student in group.Students)
@@ -209,6 +202,7 @@ namespace Console_Project.Operations
                 }
             }       
         }        
+        
         public void ShowAllStudents()
         {            
             if (AllStudents.Count == 0)
@@ -225,7 +219,8 @@ namespace Console_Project.Operations
                     Console.WriteLine($"{student}, Status: {statusOnline}");
                 }                
             }                       
-        }       
+        }   
+        
         public void CreateStudent(string fullname,string groupNo, bool type)
         {                                   
             Group group = FindGroup(groupNo);
@@ -250,11 +245,30 @@ namespace Console_Project.Operations
             group.Students.Add(student);
             Console.WriteLine($"Students in group {groupNo.ToUpper().Trim()}:\n");
             string statusOnline = group.IsOnline ? "Online" : "Offline";
-            foreach (Student stud in group.Students)
+            foreach (Student eachStudent in group.Students)
             {
-                Console.WriteLine($"{stud}, Status: {statusOnline}");
+                Console.WriteLine($"{eachStudent}, Status: {statusOnline}");// print all info about each student
             }            
         }
+
+        public void DeleteStudent(Student student)
+        {            
+            AllStudents.Remove(student);
+            foreach (Group group in AllGroups)
+            {               
+                group.Students.Remove(student);
+            }
+            ClearAndColor();        
+            Console.WriteLine($"{student.Fullname} has been deleted.");
+        }
+        //public void DeleteGroup(Group group)
+        //{           
+        //    AllGroups.Remove(group);
+        //    //AllGroups.Remove(group.Students);
+        //    ClearAndColor();
+        //    Console.WriteLine($"{group.No} has been deleted.");
+        //}
+
         public static bool CheckFullname(string fullname)
         {
             if (fullname.Length > 30)
@@ -287,10 +301,11 @@ namespace Console_Project.Operations
             Console.WriteLine("Fullname must include: Name + Space + Surname. Example(Fakhri Afandiyev)");
             return false;
         }
+
         public static void ClearAndColor()
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Red;
-        }
+        }        
     }
 }
