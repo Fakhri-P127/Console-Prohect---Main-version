@@ -57,7 +57,7 @@ namespace Console_Project
                             break;
                         case 0:
                             AcademyService.ClearAndColor();
-                            Console.WriteLine("You exited the application");//there's no code after this so we can just return it, program will stop.
+                            Console.WriteLine("You exited the application");//there's no code after while loop so we can just return it, program will end.
                             return;
                         default:
                             AcademyService.ClearAndColor();
